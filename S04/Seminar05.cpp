@@ -9,14 +9,40 @@ using namespace std;
 //	int x;
 //};
 
+float calculeazaMedia(int* note, int n) {
+	float avg = 0;
+	for (int i = 0; i < n; i++) {
+		avg += note[i];
+	}
+
+	avg /= n;
+
+	return avg;
+}
+
 class Carte {
 //private: // by default
 private:
 	char* title = nullptr;
 	char* author = nullptr;
 	int year;
+	int* note = nullptr;
+	int nrNote = 0;
+
 
 public:
+
+	float calculeazaMedia(int notaMinima) {
+		float avg = 0;
+		for (int i = 0; i < this->nrNote; i++) {
+			avg += this->note[i];
+		}
+
+		avg /= this->nrNote;
+
+		return avg;
+	}
+
 	Carte() {
 		cout << "Acesta este constructorul default" << endl;
 		title = new char[50];
@@ -46,15 +72,29 @@ public:
 	}
 
 	char* getTitle() {
-		//return this->title; // shallow copy
+		// return this->title; // shallow copy // NU
+		if (this->title == nullptr) {
+			return nullptr;
+		}
+
 		char* copie = new char[strlen(this->title) + 1];
 		strcpy(copie, this->title);
-		return copie;
+		return copie; // deep copy
 	}
 
-	void setTitle(const char* title) {
+	void setTitle(char* title) {
+		// this->title = title; shallow copy // NU
+
+		if (this->title != nullptr) {
+			delete[] this->title;
+		}
+
 		this->title = new char[strlen(title) + 1];
 		strcpy(this->title, title);
+	}
+
+	int getYear() {
+		return this->year;
 	}
 };
 
@@ -72,10 +112,22 @@ int main()
 	c2.display();
 
 	cout << c2.getTitle() << endl;
-	c2.getTitle()[0] = 'K';
+	char* titluCarte = c2.getTitle();
+	titluCarte[0] = 'K';
 	cout << c2.getTitle() << endl;
 
-	c2.setTitle("ABCD");
-	cout << c2.getTitle();
+	char* titlu = new char[50];
+	strcpy(titlu, "Un titlu");
+	c2.setTitle(titlu);
+	c2.display();
+	titlu[0] = '0';
+	c2.display();
+
+	cout << "\n************************\n\n";
+
+	c2.display();
+	int anul = c2.getYear();
+	anul = 100;
+	c2.display();
 	return 0;
 }
